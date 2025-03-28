@@ -2,14 +2,14 @@ import express, { Express } from "express";
 import cors from "cors";
 import http from "http";
 import { WebSocket } from "ws";
-
+import createRouter from "express-file-routing";
 (async () => {
   const app: Express = express();
-  const port = 3000;
+  const port = 3001;
 
   app.use(cors());
   app.options("*", cors());
-
+  await createRouter(app);
   app.use(express.json());
 
   // Error handler
@@ -23,13 +23,6 @@ import { WebSocket } from "ws";
 
   // Websocket Server
   server.on("upgrade", async (request, socket, head) => {
-    const token = request.url?.split("?token=").at(-1);
-
-    if (!token) {
-      socket.destroy();
-      return;
-    }
-
     WSS.handleUpgrade(request, socket, head, (ws) => {
       WSS.emit("connection", ws, request);
     });

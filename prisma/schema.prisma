@@ -14,10 +14,10 @@ datasource db {
 }
 
 model User {
-  id String
-  email String @unique
-  name String?
-  imageUrl String?
+  id           String  @id @default(cuid())
+  email        String  @unique
+  name         String?
+  imageUrl     String?
   passwordHash String?
 
   createdAt DateTime @default(now())
