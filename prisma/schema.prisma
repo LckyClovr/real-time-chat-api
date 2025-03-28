@@ -14,11 +14,47 @@ datasource db {
 }
 
 model User {
-  id           String  @id @default(cuid())
-  email        String  @unique
-  name         String?
-  imageUrl     String?
-  passwordHash String?
+  id           String  @id @default(cuid()) // This is auto-generated and doesn't need to be specified
+  username     String  @unique // This is the user's unique log in name
+  name         String? // This is the user's display name
+  imageUrl     String? // This is the user's profile image
+  passwordHash String? // This is the user's password hash
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Messages        Message[] // This is the list of messages sent by the user
+  ChatMemberships ChatMembership[] // This is the list of chats the user is a member of
+}
+
+model ChatMembership {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  chatId String
+  chat   Chat   @relation(fields: [chatId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Chat {
+  id       String    @id @default(cuid()) // This is auto-generated and doesn't need to be specified
+  name     String // This is the chat's name
+  messages Message[] // This is the list of messages in the chat
+
+  createdAt       DateTime         @default(now()) // This is the date the chat was created
+  updatedAt       DateTime         @updatedAt // This is the date the chat was last updated
+  ChatMemberships ChatMembership[] // This is the list of users who are members of the chat
+}
+
+model Message {
+  id     String @id @default(cuid()) // This is auto-generated and doesn't need to be specified
+  text   String // This is the message's text
+  userId String // This is the user who sent the message
+  user   User   @relation(fields: [userId], references: [id]) // This is the user who sent the message
+  chatId String // This is the chat the message was sent in
+  chat   Chat   @relation(fields: [chatId], references: [id]) // This is the chat the message was sent in
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
