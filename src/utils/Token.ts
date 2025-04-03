@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "./env";
+import jwt from "jsonwebtoken";
 
 export function generateTokens(userId: string) {
   const httpToken = jwt.sign({ userId }, JWT_SECRET, {
