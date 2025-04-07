@@ -9,6 +9,7 @@ const messageSchema = z.object({
 });
 
 export const POST = [
+  validateSchema(messageSchema),
   async (req: Request, res: Response) => {
     const user = await prisma.user.findFirst({
       where: {},
