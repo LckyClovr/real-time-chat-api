@@ -11,7 +11,14 @@ export const GET = [
     const chat = await prisma.chat.findUnique({
       where: { id: chatId },
       include: {
-        messages: true,
+        messages: {
+          include: {
+            user: true,
+          },
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
       },
     });
 

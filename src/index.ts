@@ -3,14 +3,18 @@ import cors from "cors";
 import http from "http";
 import { WebSocket } from "ws";
 import createRouter from "express-file-routing";
+import { logRequest } from "./middlewares/logRequest";
 (async () => {
   const app: Express = express();
   const port = 3001;
 
   app.use(cors());
   app.options("*", cors());
-  await createRouter(app);
+
   app.use(express.json());
+  app.use(logRequest);
+
+  await createRouter(app);
 
   // Error handler
   app.use((err: any, req: any, res: any, next: any) => {
